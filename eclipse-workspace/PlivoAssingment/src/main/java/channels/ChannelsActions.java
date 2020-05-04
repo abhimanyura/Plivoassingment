@@ -9,15 +9,15 @@ import utils.ApiConstants;
 import utils.PropertyFileUtils;
 import utils.RestManager;
 import utils.RestRequest;
-
 import java.util.HashMap;
+
 public class ChannelsActions {
 
 	private String baseURI;
 	private String token;
 	PropertyFileUtils propertyFileUtils=new PropertyFileUtils();
 	/**
-	 * Constructor to intialize the value of BaseUri
+	 * Constructor to initialize the value of BaseUri and Token
 	 */
 	public ChannelsActions()
 	{
@@ -27,14 +27,13 @@ public class ChannelsActions {
 
 
 	/**
-	 * 	
+	 * 	This method is used to build the request for channel creation
 	 * @param channelName-name of the channel that needs to be created.
-	 * @param token
 	 * @return
 	 */
-	public RestRequest buildcreateChannelRequest(String channelName)
+	public RestRequest buildCreateChannelRequest(String channelName)
 	{
-		HashMap<String,String> headers=new HashMap();
+		HashMap<String,String> headers=new HashMap<String, String>();
 		headers.put("Authorization", "Bearer " + token);
 		String payload="{\"name\":" + "\"" + channelName + "\""+"}";
 		return RestRequest.builder().method(RestRequest.METHOD.POST).url(baseURI+ApiConstants.CHANNEL_CREATE)
@@ -42,122 +41,107 @@ public class ChannelsActions {
 
 	}
 	/**
-	 * 
+	 * This method is used to post the request for channel creation
 	 * @param name
-	 * @param token
 	 * @return
-	 * @throws Exception
 	 */
 	public CreateChannelResponse postCreateChannelRequest(String channelName) 
 	{
-		return RestManager.getInstance().execute(buildcreateChannelRequest(channelName)).as(CreateChannelResponse.class);
+		return RestManager.getInstance().execute(buildCreateChannelRequest(channelName)).as(CreateChannelResponse.class);
 	}
 
-	public RestRequest buildRenameChannelRequest(String existingChannelId,String channelName)
+	/**
+	 * This method is used to build the request for channel rename
+	 * @param existingChannelId-Id of channel whose name we want to change.
+	 * @param newChannelName-new channel name
+	 * @return
+	 */
+	public RestRequest buildRenameChannelRequest(String existingChannelId,String newChannelName)
 	{
-		HashMap<String,String> headers=new HashMap();
+		HashMap<String,String> headers=new HashMap<String, String>();
 		headers.put("Authorization", "Bearer " + token);
-		String payload="{\"name\":" + "\"" + channelName + "\"" + ",\"channel\":" + "\"" + existingChannelId + "\"" + "}";
+		String payload="{\"name\":" + "\"" + newChannelName + "\"" + ",\"channel\":" + "\"" + existingChannelId + "\"" + "}";
 		return RestRequest.builder().method(RestRequest.METHOD.POST).url(baseURI+ApiConstants.CHANNEL_RENAME)
 				.headers(headers).contentType(ContentType.JSON).payload(payload).build();
 	}
 
 
 	/**
-	 * 
-	 * @param name
-	 * @param token
+	 * This method is used to post the request for channel rename
+	* @param existingChannelId-Id of channel whose name we want to change.
+	 *@param newChannelName-new channel name
 	 * @return
-	 * @throws Exception
 	 */
-	public CreateChannelResponse postReanameChannelRequest(String existingChannelId,String channelName) 
+	public CreateChannelResponse postRenameChannelRequest(String existingChannelId, String newChannelName)
 	{
-		return RestManager.getInstance().execute(buildRenameChannelRequest(existingChannelId,channelName)).as(CreateChannelResponse.class);
+		return RestManager.getInstance().execute(buildRenameChannelRequest(existingChannelId,newChannelName)).as(CreateChannelResponse.class);
 	}
 	/**
-	 * 
-	 * @param token
+	 *This method is used to build the request to list out the channels
 	 * @return
 	 */
 	public RestRequest buildGetChannelsListRequest()
 	{
-		HashMap<String,String> headers=new HashMap();
+		HashMap<String,String> headers=new HashMap<String, String>();
 		headers.put("Authorization", "Bearer " + token);
 		return RestRequest.builder().method(RestRequest.METHOD.GET).url(baseURI+ApiConstants.CHANNEL_LIST)
 				.headers(headers).contentType(ContentType.JSON).build();
 	}
-	/**
-	 * 
-	 * @param args
-	 * @throws Exception
-	 */
 
 	/**
-	 * 
-	 * @param token
+	 * This method is used to get the  channel list
 	 * @return
-	 * @throws Exception 
 	 */
+
 	public ChannelListResponse getChannelsListRequest() 
 	{
 		return RestManager.getInstance().execute(buildGetChannelsListRequest()).as(ChannelListResponse.class);
 	}
 
 
-
 	/**
-	 * 
-	 * @param token
+	 * This method is used to build the request to archive the channel
+	 * @param channelId
 	 * @return
 	 */
-	public RestRequest buildArchiveChannelsListRequest(String name)
+	public RestRequest buildArchiveChannelsRequest(String channelId)
 	{
-		HashMap<String,String> headers=new HashMap();
+		HashMap<String,String> headers=new HashMap<String, String>();		
 		headers.put("Authorization", "Bearer " + token);
-		String payload="{\"channel\":" + "\"" + name + "\""+"}";
+		String payload="{\"channel\":" + "\"" + channelId + "\""+"}";
 		return RestRequest.builder().method(RestRequest.METHOD.POST).url(baseURI+ApiConstants.CHANNEL_ARCHIVE)
 				.headers(headers).contentType(ContentType.JSON).payload(payload).build();
 	}
-	/**
-	 * 
-	 * @param args
-	 * @throws Exception
-	 */
+
 
 	/**
-	 * 
-	 * @param token
+	 * This method is used to post the request to archive channels
+	 * @param channelId
 	 * @return
-	 * @throws Exception 
 	 */
-	public Response postArchiveChannelsRequest(String channelName) 
+	public Response postArchiveChannelsRequest(String channelId)
 	{
-		return RestManager.getInstance().execute(buildArchiveChannelsListRequest(channelName));
+		return RestManager.getInstance().execute(buildArchiveChannelsRequest(channelId));
 	}
+
 	/**
-	 * 
-	 * @param token
+	 * This method is used to build the request to join the channel
+	 * @param channelName
 	 * @return
 	 */
-	public RestRequest buildJoinChannelsRequest(String name)
+	public RestRequest buildJoinChannelsRequest(String channelName)
 	{
-		HashMap<String,String> headers=new HashMap();
+		HashMap<String,String> headers=new HashMap<String, String>();
 		headers.put("Authorization", "Bearer " + token);
-		String payload="{\"name\":" + "\"" + name + "\""+"}";
+		String payload="{\"name\":" + "\"" + channelName + "\""+"}";
 		return RestRequest.builder().method(RestRequest.METHOD.POST).url(baseURI+ApiConstants.CHANNEL_JOIN)
 				.headers(headers).contentType(ContentType.JSON).payload(payload).build();
 	}
-	/**
-	 * 
-	 * @param args
-	 * @throws Exception
-	 */
 
 	/**
-	 * 
-	 * @param token
+	 * This method is used to post the request to join a channel
+	 * @param channelName
 	 * @return
-	 * @throws Exception 
 	 */
 	public JoinChannelResponse postJoinChannelsRequest(String channelName) 
 	{
@@ -165,8 +149,9 @@ public class ChannelsActions {
 	}
 
 	/**
-	 * 
-	 * @param args
+	 * This method is used to get the id of channel based on its name.
+	 * @param channelName
+	 * @return- Channel id as String
 	 */
 	public String getChannelIdBasedOnChannelName(String channelName)
 	{
@@ -185,7 +170,12 @@ public class ChannelsActions {
 		}
 		return channelId;
 	}
-	
+
+	/**
+	 * This method is used to check whether the Channel name is present in the channel list of user or not
+	 * @param channelName
+	 * @return
+	 */
 	public boolean findPresenceOfChannel(String channelName)
 	{
 		boolean found=false;
